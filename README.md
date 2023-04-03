@@ -1,14 +1,14 @@
-## Recipe Book App
+# Recipe Book App
 Simple recipe book app created with Python
 
-# Goal and requirements
+## Goal and requirements
 
-# Project Status
+## Project Status
 
-# Support
+## Support
 If you encounter any problems while trying to run this program, please let me know
 
-# Credits
+## Credits
 All the credits go to 
 1. Raihan Rifandi
 2. Putri Amelia
