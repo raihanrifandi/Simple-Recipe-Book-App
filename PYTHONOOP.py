@@ -22,7 +22,34 @@ class Resep:
 class bukuResep():
     def __init__(self):
         self.arrayResep = []
+        
+    def memasukkanBahan(self): 
+        try:
+            jumlahBahan = int(input("Masukkan jumlah bahan: ")) 
+            arrayBahan = list(map(str,input("Masukkan bahan-bahan: ").replace(" ", "").split(',', jumlahBahan))) [:jumlahBahan]
+            # membuat list array dengan menggunakan function map() dan input dipisahkan oleh split()
+            # strip(0) berfungsi untuk menghilangkan whitespace yang diikutsertakan oleh user saat proses penginputan
+        except ValueError:
+            print("Masukkan input berupa angka")
+            return bukuResep.memasukkanBahan() # 
+            # menggunakan rekursif sehingga input memasukkan bahan tidak berhenti
+        else:
+            return arrayBahan
     
+    def memasukkanInstruksi(self):
+        try:
+            arrayInstruksi = []
+            jumlahInstruksi = int(input("Masukkan jumlah langkah-langkah: "))
+            for i in range (jumlahInstruksi):
+                print("Langkah ke-", i+1)
+                arrayInstruksi.append(str(input()))
+        except ValueError:
+            print("Masukkan input berupa angka")
+            return bukuResep.memasukkanInstruksi()
+        else:
+            return arrayInstruksi
+        
+       
     # function untuk menambahkan resep
     def tambahResep(self, tambahMasakan):
         self.arrayResep.append(tambahMasakan)
@@ -93,13 +120,15 @@ class bukuResep():
         
     # function untuk mencari resep
     def cariResep(self, pencarian):
-        resepCocok = []
-        for tambahMasakan in self.arrayResep:
-            if pencarian.lower() in tambahMasakan.nama.lower() or pencarian.lower() in ' '.join(tambahMasakan.bahan).lower():
-                resepCocok.append(tambahMasakan)
+        for i in range(len(self.arrayResep)):
+            if self.arrayResep[i].nama.lower() == pencarian.lower():
+                print("\n")
+                Resep.returnResep(bukuResep.arrayResep[i])
                 return
-        return resepCocok
-    
+            else:
+                print("Resep tidak dapat ditemukan\n")
+                return
+
     # menampilkan resep yang telah ditambahkan
     def resepDitambahkan(self):
         for i in range(0, len(self.arrayResep)):
@@ -107,32 +136,6 @@ class bukuResep():
 
 # deklarasi variabel untuk menyimpan class
 bukuResep = bukuResep()
-
-def memasukkanBahan(): 
-        try:
-            jumlahBahan = int(input("Masukkan jumlah bahan: ")) 
-            arrayBahan = list(map(str,input("Masukkan bahan-bahan: ").replace(" ", "").split(',', jumlahBahan))) [:jumlahBahan]
-            # membuat list array dengan menggunakan function map() dan input dipisahkan oleh split()
-            # strip(0) berfungsi untuk menghilangkan whitespace yang diikutsertakan oleh user saat proses penginputan
-        except ValueError:
-            print("Masukkan input berupa angka")
-            return bukuResep.memasukkanBahan() # 
-            # menggunakan rekursif sehingga input memasukkan bahan tidak berhenti
-        else:
-            return arrayBahan
-        
-def memasukkanInstruksi():
-        try:
-            arrayInstruksi = []
-            jumlahInstruksi = int(input("Masukkan jumlah langkah-langkah: "))
-            for i in range (jumlahInstruksi):
-                print("Langkah ke-", i+1)
-                arrayInstruksi.append(str(input()))
-        except ValueError:
-            print("Masukkan input berupa angka")
-            return bukuResep.memasukkanInstruksi()
-        else:
-            return arrayInstruksi
 
 # program utama
 while True:
@@ -147,8 +150,8 @@ while True:
         os.system('cls')
         print("[1] TAMBAH RESEP")
         nama = input("Nama resep: ")
-        bahan = memasukkanBahan()
-        instruksi = memasukkanInstruksi()
+        bahan = bukuResep.memasukkanBahan()
+        instruksi = bukuResep.memasukkanInstruksi()
         waktu = int(input("Lama waktu pembuatan: "))
         resepBaru = Resep(nama, bahan, instruksi, waktu)
         bukuResep.tambahResep(resepBaru)
@@ -167,15 +170,8 @@ while True:
     elif answerChoice == "4":
         os.system('cls')
         print("[4] CARI RESEP")
-        pencarian = str(input("Pilih resep yang ingin anda cari: "))
-        resepCocok = bukuResep.cariResep(pencarian)
-        if resepCocok:
-            print("\nMatching recipes:")
-            for tambahMasakan in resepCocok:
-                print("\n", tambahMasakan)
-        else:
-            print("\nNo matching recipes foundg.")
-       
+        cariMasakan = str(input("Pilih resep yang ingin anda cari: "))
+        bukuResep.cariResep(cariMasakan)
     elif answerChoice == "5":
         break
     else:
