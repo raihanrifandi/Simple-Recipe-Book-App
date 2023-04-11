@@ -2,8 +2,7 @@
 Simple recipe book app created with Python
 
 ## Features
-- User can add, modify, or delete recipe
-- User can search recipe by asking bot or searching recipe by themself
+- User can add, delete, modify, and search recipe
 
 ## Goal and requirements
 The goal of a recipe book app is to provide a convenient and efficient way for users to access and organize their favorite recipes.
