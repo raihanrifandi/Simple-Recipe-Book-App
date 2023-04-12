@@ -1,3 +1,5 @@
+import os
+
 class Resep:
     def __init__(self, nama_resep, bahan, cara_masak, lama_membuat):
         self.nama_resep = nama_resep
@@ -40,11 +42,11 @@ class BukuResep:
                 if pilihan_edit == "1":
                     nama_resep_baru = input("Masukkan nama resep baru: ")
                     resep.nama_resep = nama_resep_baru
-                    print("Nama resep berhasil diubah")
+                    print("[STATUS]\nNama resep berhasil diubah")
                 elif pilihan_edit == "2":
                     bahan_baru = input("Masukkan bahan-bahan baru (dipisahkan dengan koma): ")
                     resep.bahan = bahan_baru.split(", ")
-                    print("Bahan berhasil diubah")
+                    print("[STATUS]\nBahan berhasil diubah")
                 elif pilihan_edit == "3":
                     cara_masak_baru = []
                     while True:
@@ -53,16 +55,17 @@ class BukuResep:
                             break
                         cara_masak_baru.append(langkah_masak_baru)
                     resep.cara_masak = cara_masak_baru
-                    print("Cara memasak berhasil diubah")
+                    print("[STATUS]\nCara memasak berhasil diubah")
                 elif pilihan_edit == "4":
                     lama_membuat_baru = input("Masukkan lama membuat baru (dalam menit): ")
                     resep.lama_membuat = lama_membuat_baru
-                    print("Lama membuat berhasil diubah")
+                    print("[STATUS]\nLama membuat berhasil diubah")
                 else:
                     print("Pilihan tidak valid")
-                break
-        else:
-            print("Resep tidak ditemukan!")
+                    break
+            else:
+                print("Resep tidak ditemukan!")
+                return False
                 
     def hapus_resep(self, nama_resep):
         for resep in self.daftar_resep:
@@ -71,6 +74,7 @@ class BukuResep:
                 break
             else:
                 print("Resep tidak ditemukan!")
+                return False
                 
     def cari_resep(self, kata_kunci):
         hasil_pencarian = []
@@ -86,18 +90,22 @@ class BukuResep:
 
 # Program utama
 buku_resep = BukuResep()
+os.system('cls')
+file = open("header.txt", "r")
+print(file.read())
 
 while True:
-    print("Menu:")
-    print("1. Tambah resep")
-    print("2. Edit resep")
-    print("3. Hapus resep")
-    print("4. Cari resep")
-    print("5. Lihat semua resep")
-    print("6. Keluar")
+    print("\nSelamat Datang di Dish-n-Dash!")
+    print("[1] Tambah resep")
+    print("[2] Edit resep")
+    print("[3] Hapus resep")
+    print("[4] Cari resep")
+    print("[5] Lihat semua resep")
+    print("[6] Keluar")
     pilihan = input("Masukkan pilihan menu: ")
     
     if pilihan == "1":
+        os.system('cls')
         nama_resep = input("Masukkan nama resep: ")
         bahan = input("Masukkan bahan-bahan (dipisahkan dengan koma): ")
         bahan = bahan.split(", ")
@@ -107,21 +115,35 @@ while True:
             if langkah_masak == "":
                 break
             cara_masak.append(langkah_masak)
-        lama_membuat = int(input("Masukkan lama memasak (dalam menit): "))
+        while True:
+            try:
+                lama_membuat = int(input("Masukkan lama memasak (dalam menit): "))
+            except ValueError:
+                print("[PERINGATAN]Masukkan input berupa angka dalam menit")
+            else:
+                break
         buku_resep.tambah_resep(nama_resep, bahan, cara_masak, lama_membuat)
-        print("Resep berhasil ditambahkan!")
+        os.system('cls')
+        print("[STATUS]\nResep berhasil ditambahkan!")
             
     elif pilihan == "2":
+        os.system('cls')
         nama_resep = input("Masukkan nama resep yang ingin diubah: ")
-        buku_resep.edit_resep(nama_resep)
-        print("Resep berhasil diubah!")
+        if buku_resep.edit_resep(nama_resep):
+            print("[STATUS]\nResep berhasil diubah!")
+        else:
+            print("[STATUS]\nResep tidak berhasil diubah!")
             
     elif pilihan == "3":
+        os.system('cls')
         nama_resep = input("Masukkan nama resep yang ingin dihapus: ")
-        buku_resep.hapus_resep(nama_resep)
-        print("Resep berhasil dihapus!")
+        if buku_resep.hapus_resep(nama_resep):
+            print("[STATUS]\nResep berhasil dihapus!")
+        else:
+            print("[STATUS]\nResep tidak berhasil dihapus!")
         
     elif pilihan == "4":
+        os.system('cls')
         kata_kunci = input("Masukkan kata kunci: ")
         hasil_pencarian = buku_resep.cari_resep(kata_kunci)
         if hasil_pencarian:
@@ -135,7 +157,7 @@ while True:
                 print("Lama membuat:", resep.lama_membuat, "menit")
                 print("="*50)
         else:
-            print("Resep tidak ditemukan!")
+            print("[STATUS]\nResep tidak ditemukan!")
             
     elif pilihan == "5":
         buku_resep.lihat_semua_resep()
