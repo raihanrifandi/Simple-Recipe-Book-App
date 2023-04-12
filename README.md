@@ -14,7 +14,5 @@ Work in progress
 If you encounter any problems while trying to run this program, please let me know
 
 ## Credits
-All the credits go to my team members
+All the credits go to
 1. Raihan Rifandi
-2. Putri Amelia
-3. Jenitra Hafizhan
