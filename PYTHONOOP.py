@@ -1,178 +1,147 @@
-import os
-
 class Resep:
-    def __init__(self, nama, bahan, instruksi, waktu): 
-        self.nama = nama
+    def __init__(self, nama_resep, bahan, cara_masak, lama_membuat):
+        self.nama_resep = nama_resep
         self.bahan = bahan
-        self.instruksi = instruksi
-        self.waktu = waktu
+        self.cara_masak = cara_masak
+        self.lama_membuat = lama_membuat
         
-    # Menggunakan Fstring 
-    def returnResep(self): # akan menampilkan resep yang baru saja ditambahkan oleh user
-        os.system('cls')
-        print(f"Resep {self.nama}")
-        print("Bahan-bahan: ")
-        for i in range(0, len(self.bahan)):
-            print(self.bahan[i])
-        print(f"\nLangkah-langkah: ")
-        for i in range(0, len(self.instruksi)):
-            print(self.instruksi[i])
-        print(f"\nResep ini memerlukan waktu {self.waktu} menit\n")
+    def lihat_resep(self):
+        print("Nama resep:", self.nama_resep)
+        print("Bahan:", self.bahan)
+        print("Cara memasak:")
+        for langkah, langkah_masak in enumerate(self.cara_masak, start=1):
+            print(f"{langkah}. {langkah_masak}")
+        print("Lama membuat:", self.lama_membuat, "menit")
+        print("="*50)
 
-class bukuResep():
+class BukuResep:
     def __init__(self):
-        self.arrayResep = []
+        self.daftar_resep = []
         
-    def memasukkanBahan(self): 
-        try:
-            jumlahBahan = int(input("Masukkan jumlah bahan: ")) 
-            arrayBahan = list(map(str,input("Masukkan bahan-bahan: ").replace(" ", "").split(',', jumlahBahan))) [:jumlahBahan]
-            # membuat list array dengan menggunakan function map() dan input dipisahkan oleh split()
-            # strip(0) berfungsi untuk menghilangkan whitespace yang diikutsertakan oleh user saat proses penginputan
-        except ValueError:
-            print("Masukkan input berupa angka")
-            return bukuResep.memasukkanBahan() # 
-            # menggunakan rekursif sehingga input memasukkan bahan tidak berhenti
-        else:
-            return arrayBahan
-    
-    def memasukkanInstruksi(self):
-        try:
-            arrayInstruksi = []
-            jumlahInstruksi = int(input("Masukkan jumlah langkah-langkah: "))
-            for i in range (jumlahInstruksi):
-                print("Langkah ke-", i+1)
-                arrayInstruksi.append(str(input()))
-        except ValueError:
-            print("Masukkan input berupa angka")
-            return bukuResep.memasukkanInstruksi()
-        else:
-            return arrayInstruksi
+    def tambah_resep(self, nama_resep, bahan, cara_masak, lama_membuat):
+        resep_baru = Resep(nama_resep, bahan, cara_masak, lama_membuat)
+        self.daftar_resep.append(resep_baru)
         
-       
-    # function untuk menambahkan resep
-    def tambahResep(self, tambahMasakan):
-        self.arrayResep.append(tambahMasakan)
-
-    # function untuk menghapus resep
-    def hapusResep(self, hapusMasakan):
-        for i in range(len(self.arrayResep)):
-            if self.arrayResep[i].nama.lower() == hapusMasakan.lower():
-                self.arrayResep.remove(bukuResep.arrayResep[i])
-                print(f"{hapusMasakan} telah dihapus dari buku resep\n")
-                return
-            else: 
-                print(f"{hapusMasakan} Resep tidak dapat ditemukan\n")
-                return
-
-    # function untuk mengedit resep
-    def editResep(self, edit):
-        namaLama = input("Silahkan masukkan nama resep dari komponen yang ingin anda ganti: ")
-        if edit == "nama":
-            for i in range((len(self.arrayResep))):
-                if self.arrayResep[i].nama.lower() == namaLama.lower():
-                    namaBaru = input("Masukkan nama baru dari resep yang ingin anda ganti: ")
-                    self.arrayResep[i].nama = namaBaru 
-                    print("\n")
-                    Resep.returnResep(bukuResep.Resep[i])
-                    return
+    def edit_resep(self, nama_resep):
+        for resep in self.daftar_resep:
+            if resep.nama_resep.lower() == nama_resep.lower():
+                print(f"Nama resep: {resep.nama_resep}")
+                print(f"Bahan: {resep.bahan}")
+                print(f"Cara memasak:")
+                for langkah, langkah_masak in enumerate(resep.cara_masak, start=1):
+                    print(f"{langkah}. {langkah_masak}")
+                print(f"Lama membuat: {resep.lama_membuat} menit")
+                print("="*50)
+                pilihan_edit = input("Pilih bagian yang ingin diedit (1-4): \n"
+                                     "1. Nama resep\n"
+                                     "2. Bahan\n"
+                                     "3. Cara memasak\n"
+                                     "4. Lama membuat\n")
+                if pilihan_edit == "1":
+                    nama_resep_baru = input("Masukkan nama resep baru: ")
+                    resep.nama_resep = nama_resep_baru
+                    print("Nama resep berhasil diubah")
+                elif pilihan_edit == "2":
+                    bahan_baru = input("Masukkan bahan-bahan baru (dipisahkan dengan koma): ")
+                    resep.bahan = bahan_baru.split(", ")
+                    print("Bahan berhasil diubah")
+                elif pilihan_edit == "3":
+                    cara_masak_baru = []
+                    while True:
+                        langkah_masak_baru = input("Masukkan cara memasak baru (kosongkan jika sudah selesai): ")
+                        if langkah_masak_baru == "":
+                            break
+                        cara_masak_baru.append(langkah_masak_baru)
+                    resep.cara_masak = cara_masak_baru
+                    print("Cara memasak berhasil diubah")
+                elif pilihan_edit == "4":
+                    lama_membuat_baru = input("Masukkan lama membuat baru (dalam menit): ")
+                    resep.lama_membuat = lama_membuat_baru
+                    print("Lama membuat berhasil diubah")
                 else:
-                    print("Resep tidak dapat ditemukan")
-                    return
-        elif edit == "bahan":
-            for i in range(len(self.arrayResep)):
-                if self.arrayResep[i].nama.lower() == namaLama.lower():
-                    print("\n")
-                    bahanSesudah = bukuResep.memasukkanBahan()
-                    self.arrayResep[i].bahan = bahanSesudah
-                    print("\n")
-                    Resep.returnResep(bukuResep.arrayResep[i])
-                    return
-                else:
-                    print("Resep tidak dapat ditemukan")
-                    return
-        elif edit == "instruksi":
-            for i in range(len(self.arrayResep)):
-                if self.arrayResep[i].nama.lower() == namaLama.lower():
-                    print("\n")
-                    instruksiBaru = bukuResep.memasukkanInstruksi()
-                    self.arrayResep[i].instruksi = instruksiBaru
-                    print("\n")
-                    Resep.returnResep(bukuResep.arrayResep[i])
-                    return
-                else:
-                    print("Resep tidak dapat ditemukan")
-                    return
-        elif edit == "waktu":
-            for i in range(len(self.arrayResep)):
-                if self.arrayResep[i].nama.lower() == namaLama.lower():
-                    print("\n")
-                    waktuSesudah = int(input("Berapa menit waktu baru yang dibutuhkan? "))
-                    self.arrayResep[i].waktu = waktuSesudah
-                    print("\n")
-                    Resep.returnResep(bukuResep.arrayResep[i])
-                    return
-                else:
-                    print("Resep tidak dapat ditemukan")
-                    return
+                    print("Pilihan tidak valid")
+                break
         else:
-            print("Pilih komponen resep yang ingin anda ganti: nama, bahan, instruksi, waktu")
-        
-    # function untuk mencari resep
-    def cariResep(self, pencarian):
-        for i in range(len(self.arrayResep)):
-            if self.arrayResep[i].nama.lower() == pencarian.lower():
-                print("\n")
-                Resep.returnResep(bukuResep.arrayResep[i])
-                return
+            print("Resep tidak ditemukan!")
+                
+    def hapus_resep(self, nama_resep):
+        for resep in self.daftar_resep:
+            if resep.nama_resep.lower() == nama_resep.lower():
+                self.daftar_resep.remove(resep)
+                break
             else:
-                print("Resep tidak dapat ditemukan\n")
-                return
+                print("Resep tidak ditemukan!")
+                
+    def cari_resep(self, kata_kunci):
+        hasil_pencarian = []
+        for resep in self.daftar_resep:
+            if kata_kunci.lower() in resep.nama_resep.lower():
+                hasil_pencarian.append(resep)
+        return hasil_pencarian
+    
+    def lihat_semua_resep(self):
+        for resep in self.daftar_resep:
+            resep.lihat_resep()
 
-    # menampilkan resep yang telah ditambahkan
-    def resepDitambahkan(self):
-        for i in range(0, len(self.arrayResep)):
-            print(self.arrayResep[i].nama)
 
-# deklarasi variabel untuk menyimpan class
-bukuResep = bukuResep()
+# Program utama
+buku_resep = BukuResep()
 
-# program utama
 while True:
-    # Membaca file untuk menampilkan header
-    file = open("header.txt", "r")
-    print(file.read())
-    print("\nSelamat Datang di Dish-n-Dash! \n ================== \n |1. Tambah resep | \n |2. Hapus resep  | \n |3. Edit resep   | \n |4. Cari resep   | \n |6. Keluar       | \n ==================")
-    print("\nResep yang baru saja anda tambahkan:")
-    bukuResep.resepDitambahkan()
-    answerChoice = input("Masukkan pilihan: ")
-    if answerChoice == "1":
-        os.system('cls')
-        print("[1] TAMBAH RESEP")
-        nama = input("Nama resep: ")
-        bahan = bukuResep.memasukkanBahan()
-        instruksi = bukuResep.memasukkanInstruksi()
-        waktu = int(input("Lama waktu pembuatan: "))
-        resepBaru = Resep(nama, bahan, instruksi, waktu)
-        bukuResep.tambahResep(resepBaru)
-        print("\n")
-        resepBaru.returnResep()
-    elif answerChoice == "2":
-        os.system('cls')
-        print(["[2] HAPUS RESEP"])
-        hapusMasakan = str(input("Resep mana yang ingin anda hapus? "))
-        bukuResep.hapusResep(hapusMasakan)
-    elif answerChoice == "3":
-        os.system('cls')
-        print("[3] EDIT RESEP")
-        editMasakan = str(input("Pilih komponen resep yang ingin anda gant \n [*]nama \n [*]bahan \n [*]instruksi \n [*]waktu \n "))
-        bukuResep.editResep(editMasakan.lower())
-    elif answerChoice == "4":
-        os.system('cls')
-        print("[4] CARI RESEP")
-        cariMasakan = str(input("Pilih resep yang ingin anda cari: "))
-        bukuResep.cariResep(cariMasakan)
-    elif answerChoice == "5":
+    print("Menu:")
+    print("1. Tambah resep")
+    print("2. Edit resep")
+    print("3. Hapus resep")
+    print("4. Cari resep")
+    print("5. Lihat semua resep")
+    print("6. Keluar")
+    pilihan = input("Masukkan pilihan menu: ")
+    
+    if pilihan == "1":
+        nama_resep = input("Masukkan nama resep: ")
+        bahan = input("Masukkan bahan-bahan (dipisahkan dengan koma): ")
+        bahan = bahan.split(", ")
+        cara_masak = []
+        while True:
+            langkah_masak = input("Masukkan cara memasak (kosongkan jika sudah selesai): ")
+            if langkah_masak == "":
+                break
+            cara_masak.append(langkah_masak)
+        lama_membuat = int(input("Masukkan lama memasak (dalam menit): "))
+        buku_resep.tambah_resep(nama_resep, bahan, cara_masak, lama_membuat)
+        print("Resep berhasil ditambahkan!")
+            
+    elif pilihan == "2":
+        nama_resep = input("Masukkan nama resep yang ingin diubah: ")
+        buku_resep.edit_resep(nama_resep)
+        print("Resep berhasil diubah!")
+            
+    elif pilihan == "3":
+        nama_resep = input("Masukkan nama resep yang ingin dihapus: ")
+        buku_resep.hapus_resep(nama_resep)
+        print("Resep berhasil dihapus!")
+        
+    elif pilihan == "4":
+        kata_kunci = input("Masukkan kata kunci: ")
+        hasil_pencarian = buku_resep.cari_resep(kata_kunci)
+        if hasil_pencarian:
+            print("Hasil pencarian:")
+            for resep in hasil_pencarian:
+                print("Nama resep:", resep.nama_resep)
+                print("Bahan:", resep.bahan)
+                print("Cara membuat: ")
+                for i in range(0, len(resep.cara_masak)):
+                    print(f"{i+1}. {resep.cara_masak[i]}")
+                print("Lama membuat:", resep.lama_membuat, "menit")
+                print("="*50)
+        else:
+            print("Resep tidak ditemukan!")
+            
+    elif pilihan == "5":
+        buku_resep.lihat_semua_resep()
+        
+    elif pilihan == "6":
         break
+    
     else:
-        print("Silahkan pilih opsi dari 1-6")
+        print("Menu tidak valid. Silakan coba lagi.")
