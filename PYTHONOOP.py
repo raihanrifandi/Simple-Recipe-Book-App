@@ -7,10 +7,10 @@ class Resep:
         self.instruksi = instruksi
         self.waktu = waktu
         
-    def lihat_resep(self):
+    def tampilkan_resep(self):
         print("Nama resep:", self.nama)
         print("Bahan:", self.bahan)
-        print("Cara memasak:")
+        print("Langkah-langkah:")
         for langkah, langkah_masak in enumerate(self.instruksi, start=1):
             print(f"{langkah}. {langkah_masak}")
         print("Lama waktu:", self.waktu, "menit")
@@ -19,6 +19,13 @@ class Resep:
 class BukuResep:
     def __init__(self):
         self.daftar_resep = []
+    
+    def cek_resep(self, nama):
+        for resep in self.daftar_resep:
+            if resep.nama.lower() == nama.lower():
+                return True
+            else:
+                return False
         
     def tambah_resep(self, nama, bahan, instruksi, waktu):
         resep_baru = Resep(nama, bahan, instruksi, waktu)
@@ -36,7 +43,7 @@ class BukuResep:
 
         print(f"Nama resep: {self.daftar_resep[indeks_resep].nama}")
         print(f"Bahan: {self.daftar_resep[indeks_resep].bahan}")
-        print(f"Lnagkah-langkah:")
+        print(f"Langkah-langkah:")
         
         for langkah, langkah_masak in enumerate(self.daftar_resep[indeks_resep].instruksi, start=1):
             print(f"{langkah}. {langkah_masak}")
@@ -71,10 +78,15 @@ class BukuResep:
             print("[STATUS]\nLangkah-langkah berhasil diubah")
             
         elif pilihan_edit == "4":
-            waktu_baru = int(input("Masukkan lama wakt yang baru (dalam menit): "))
-            self.daftar_resep[indeks_resep].waktu = waktu_baru
-            print("[STATUS]Lama waktu berhasil diubah")
-            
+            while True:
+                try:
+                    waktu_baru = int(input("Masukkan lama waktu yang baru (dalam menit): "))
+                    self.daftar_resep[indeks_resep].waktu = waktu_baru
+                    print("[STATUS]Lama waktu berhasil diubah")
+                except ValueError:
+                    print("[PERINGATAN]Masukkan input berupa angka")
+                else:
+                    break
         else:
             print("Silahkan masukkan input sesuai dengan angka pada menu")
 
@@ -98,7 +110,7 @@ class BukuResep:
     
     def lihat_semua_resep(self):
         for resep in self.daftar_resep:
-            resep.lihat_resep()
+            resep.tampilkan_resep()
 
 # Program utama
 buku_resep = BukuResep()
@@ -118,7 +130,14 @@ while True:
     
     if pilihan == "1":
         os.system('cls')
-        nama = input("Masukkan nama resep: ")
+        
+        while True:
+            nama = input("Masukkan nama resep: ")
+            if buku_resep.cek_resep(nama):
+                print("==================[PESAN]==================\nNama resep tersebut sudah ada di buku resep\n===========================================")
+            else:
+                break
+        
         bahan = input("Masukkan bahan-bahan (dipisahkan dengan koma): ")
         bahan = bahan.split(", ")
         instruksi = []
@@ -131,7 +150,7 @@ while True:
             try:
                 waktu = int(input("Masukkan lama waktu untuk membuat resep ini (dalam menit): "))
             except ValueError:
-                print("[PERINGATAN]Masukkan input berupa angka dalam menit")
+                print("[PERINGATAN]Masukkan input berupa angka")
             else:
                 break
         buku_resep.tambah_resep(nama, bahan, instruksi, waktu)
