@@ -8,7 +8,7 @@ Simple recipe book app created with Python
 The goal of a recipe book app is to provide a convenient and efficient way for users to access and organize their favorite recipes.
 
 ## Project Status
-Done
+Completed
 
 ## Support
 If you encounter any problems while trying to run this program, please let me know
